@@ -56,7 +56,7 @@ class Button(CSS):
 
 
 class Containers:
-    #TODO: add buttons, form, hover
+    #TODO: form
     """
     currently supports:
     <strong>
@@ -67,6 +67,8 @@ class Containers:
     <ol>
     <ul>
     <div> with class and id
+    <button> with onlick along with JavaScript, 
+    advanced styling including hover and webkit-transition
 
 
 
