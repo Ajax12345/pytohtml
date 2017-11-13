@@ -29,9 +29,9 @@ class Button(CSS):
         CSS.__init__(self, self.buttonname)
 
 
-    def button(self, text, classname,onclick="", border_radius = "auto", background_color="auto", color="auto", padding="auto", position = "auto", text_align='auto',text_decoration="auto", font_size="auto", margin="auto", margin_top="auto", margin_left="auto", margin_right="auto", margin_bottom="auto"):
+    def button(self, text, classname, onclick="", width="auto", height="auto", border_radius = "auto", background_color="auto", color="auto", padding="auto", position = "auto", text_align='auto',text_decoration="auto", font_size="auto", margin="auto", margin_top="auto", margin_left="auto", margin_right="auto", margin_bottom="auto"):
         self.buttonname = classname
-        self.header = "<button class='{}' onclick = '{}' style='border-radius:{};background-color:{};color:{};padding:{};position:{};text-align:{};text-decoration:{};font-size:{};margin:{};margin-top:{};margin-left:{};margin-right:{};margin-bottom:{};'>{}</button>\n\n".format(classname, onclick, border_radius, background_color, color, padding, position, text_align,text_decoration, font_size, margin, margin_top, margin_left, margin_right, margin_bottom, text)
+        self.header = "<button class='{}' onclick = '{}' style='border-radius:{};background-color:{};color:{};padding:{};position:{};text-align:{};text-decoration:{};font-size:{};margin:{};margin-top:{};margin-left:{};margin-right:{};margin-bottom:{};width:{};height:{};'>{}</button>\n\n".format(classname, onclick, border_radius, background_color, color, padding, position, text_align,text_decoration, font_size, margin, margin_top, margin_left, margin_right, margin_bottom, width, height,text)
         #classname, background_color, color, padding, position, text_align,text_decoration, font_size, margin, margin_top, margin_left, margin_right, margin_bottom
     def hover(self, **kwargs):
         self.hover_style(**kwargs)
@@ -56,7 +56,7 @@ class Button(CSS):
 
 
 class Containers:
-    #TODO: form
+    #TODO: add buttons, form, hover
     """
     currently supports:
     <strong>
@@ -67,8 +67,6 @@ class Containers:
     <ol>
     <ul>
     <div> with class and id
-    <button> with onlick along with JavaScript, 
-    advanced styling including hover and webkit-transition
 
 
 
@@ -253,6 +251,7 @@ class Body(Containers):
         self.filecontent = "<html>\n"+self.style+'\n' + self.filecontent
         self.filecontent += self.script
         self.filecontent += "\n</html>"
+
 
 
 
