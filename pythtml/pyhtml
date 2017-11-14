@@ -81,6 +81,8 @@ class Containers:
         self.current_style = ''
         self.current_script = ''
 
+
+
         '''
     def h1(self, text, color="black", font_size="auto", width="auto", height="auto", text_align="auto", font_family="auto", position="auto", margin="auto", margin_left="auto", margin_right="auto", margin_top="auto", margin_bottom="auto", font_weight="auto"):
         """in the format width, height, font_size, text_align, position, font_family, color, margin, margin_left, margin_right, margin_bottom, margin_top, text"""
@@ -127,6 +129,53 @@ class Containers:
 
         raise AttributeError("No HTML tag '{}'".format(name))
 
+class Form(Containers):
+    def __init__(self):
+        Containers.__init__(self)
+        self.final_form = "<form action="" method='post'>\n{form_content}\n</form>\n\n"
+        self.form = ''
+
+    def input(self, input_type, name, placeholder='', checked="", values='', items=''):
+        if input_type == "radio":
+            form_vals = "\n<input type='radio' name = '{}' value='{}' checked>{}</br>\n".format(name, values[0], checked)+'\n'.join(["<input type='radio' name = '{}' value='{}'>{}</br>\n".format(name, the_value, the_item) for the_value, the_item in zip(values[1:], items[1:])]) if checked else '\n'.join(["<input type='radio' name = '{}' value='{}'>{}</br>".format(name, the_value, the_item) for the_value, the_item in zip(values, items)])
+            self.form += form_vals
+
+        elif input_type == "checkbox":
+            if checked:
+                header = '\n<input type="checkbox" name="{}" value="{}" checked="checked">{}<br>\n'.format(name, values, checked) if not isinstance(values, list) else '\n<input type="checkbox" name="{}" value="{}" checked="checked">{}<br>\n'.format(name, values[0], checked)+'\n'.join(['\n<input type="checkbox" name="{}" value="{}">{}<br>\n\n' for name, val, t in zip(names, values[1:], items)])
+                self.form += header
+            else:
+                header = '\n<input type="checkbox" name="{}" value="{}">{}<br>\n'.format(name, values, items) if not isinstance(items, list) else '\n'.join(['<input type="checkbox" name="{}" value="{}">{}<br>\n'.format(name, value, t) for value, t in zip(values, items)])
+                self.form += header
+        else:
+            form_vals = '\n<input type="{}" name="{}" placeholder="{}" />\n'.format(input_type, name, placeholder)
+            self.form += form_vals
+
+    def render_form(self):
+        self.final_form = self.final_form.format(form_content=self.form)
+        return self.final_form
+
+    def __getattr__(self, name):
+
+        if re.findall('^h\d+$|^p\d+$|strong', name):
+            def wrapper(text, color="black", font_size="auto", width="auto", height="auto", text_align="auto", font_family="auto", position="auto", margin="auto", margin_left="auto", margin_right="auto", margin_top="auto", margin_bottom="auto", font_weight="auto"):
+
+                line = "<{} style='width:{};height:{};font-size:{};text-align:{};position:{};font-family:{};color:{};margin:{};margin-left:{};margin-right:{};margin-bottom:{};margin-top:{};font-weight:{};'>{}</{}>".format(name, width, height, font_size, text_align, position, font_family, color, margin, margin_left, margin_right, margin_bottom, margin_top, font_weight, text, name)
+                self.form_header += '\n\n'+line
+            return wrapper
+
+
+        if name == "ol" or name == "ul":
+            def wrapper(items = [], width="auto", color="auto", height="auto", font_weight="auto", text_align="auto", font_size="auto",font_family="auto", position="auto", margin="auto", margin_left="auto", margin_right="auto", margin_top="auto", margin_bottom="auto", **elements):
+                header = "<{} style='width:{};height:{};font-size:{};text-align:{};position:{};font-family:{};color:{};margin:{};margin-left:{};margin-right:{};margin-bottom:{};margin-top:{};font-weight:{};'>".format(name, width, height, font_size, text_align, position, font_family, color, margin, margin_left, margin_right, margin_bottom, margin_top, font_weight)
+                bottom = "</{}>".format(name)
+                full_listing = '\n\n'.join('<li style=color:{};front-size:{};font-family:{};font-weight:{}>{}</li>'.format(c, f, ff, fw, i) for c, f, ff, fw, i in zip(elements.get("colors", ["auto"]*len(items)), elements.get("font", ["auto"]*len(items)), elements.get("font-family", ['auto']*len(items)),  elements.get("font-weight", ['auto']*len(items)), items))
+                self.form_header += '\n'+header+'\n'+full_listing+'\n\n'+bottom
+            return wrapper
+
+        raise AttributeError("No HTML tag '{}'".format(name))
+
+
 class div:
     def __init__(self, classname=False, idname=False, background_color="auto", background_position="auto", position="auto", background_repeat="auto", border="auto", border_color="auto", border_style="auto", display="auto", the_float="auto", font="auto", font_family="auto", font_size="auto", font_style="auto", font_weight="auto", height="auto", width="auto", margin="auto", margin_left="auto", margin_top="auto", margin_right="auto", margin_bottom="auto", padding="auto", shadow="auto", text_align="auto", text_indent="auto", border_width="auto", border_radius = "auto"):
         if not (classname or idname):
@@ -145,6 +194,9 @@ class div:
 
         line = "<a href='{}' style='width:{};height:{};font-size:{};text-align:{};position:{};font-family:{};color:{};margin:{};margin-left:{};margin-right:{};margin-bottom:{};margin-top:{};font-weight:{};text-decoration:{};'>{}</a>\n".format(link, width, height, font_size, text_align, position, font_family, color, margin, margin_left, margin_right, margin_bottom, margin_top, font_weight, text_decoration, text)
         self.filecontent += '\n\n'+line
+
+    def upload_html(self, code):
+        self.filecontent += '\n'+code
 
     def __getattr__(self, name):
 
@@ -244,6 +296,9 @@ class Body(Containers):
     def upload_button(self, header):
         self.filecontent += '\n'+header+'\n'
 
+    def upload_form(self, form):
+        self.filecontent += '\n'+form
+
     def render(self):
         self.style = self.style.format(style=self.current_style)
         self.script = self.script.format(src = self.src, js_code = self.current_script)
@@ -251,8 +306,5 @@ class Body(Containers):
         self.filecontent = "<html>\n"+self.style+'\n' + self.filecontent
         self.filecontent += self.script
         self.filecontent += "\n</html>"
-
-
-
 
 
