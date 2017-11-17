@@ -27,3 +27,41 @@ body.create_file()
 5. Contributing.
 6. Author and Contact.
 
+## Installation
+
+Comming to PyPi shortly
+
+## Usage
+
+### Basic HTML Generation
+
+#### Body Content Creation
+
+To create the main html container, create a body object. `Body` supports most css styling elements, which can be passed to the class constructor:
+
+```
+body = pyhtml.Body(background_color="blue", text_align="center")
+```
+Currently, PyToHtml supports h1-h6 headers and p1- onward paragraph tags. To create a header or paragraph, call the appropriate method:
+
+```
+body.h1("Welcome", color="red", font_size="50px")
+body.h2("New Website")
+body.p2("First content created by PyTOHtml", color="green")
+```
+### Divs
+
+As of 11/17/17, PyToHtml only supports the div block element. However, spans etc. will be introduced shortly.
+To create a div, create a class object:
+```
+div_content = div(classname="new_div", background_color="green", width="200px", height="100px", margin_left="100px")
+```
+PyToHtml also supports div id naming:
+```
+div_content = div(idname ="new_div", background_color="green", width="200px", height="100px", margin_left="100px")
+```
+
+
+
+
+
