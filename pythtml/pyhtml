@@ -130,10 +130,12 @@ class Containers:
         raise AttributeError("No HTML tag '{}'".format(name))
 
 class Form(Containers):
-    def __init__(self):
+    def __init__(self, input_value = None):
         Containers.__init__(self)
-        self.final_form = "<form action="" method='post'>\n{form_content}\n</form>\n\n"
+        self.input_value = input_value
+        self.final_form = "<form action="" method='post'>\n{form_content}\n</form>\n\n\n<input type='submit' value='{value}'>\n"
         self.form = ''
+
 
     def input(self, input_type, name, placeholder='', checked="", values='', items=''):
         if input_type == "radio":
@@ -151,8 +153,15 @@ class Form(Containers):
             form_vals = '\n<input type="{}" name="{}" placeholder="{}" />\n'.format(input_type, name, placeholder)
             self.form += form_vals
 
+    def select(self, name, values, items):
+        self.select_box = "<select name='{name}'>\n{data}\n</select>\n".format(name=name, data = '\n'.join(['<option value="{}">{}</option>\n'.format(i, c) for i, c in zip(values, items)]))
+
+        self.form += self.select_box
+
+
+
     def render_form(self):
-        self.final_form = self.final_form.format(form_content=self.form)
+        self.final_form = self.final_form.format(form_content=self.form, value='' if not self.input_value else self.input_value)
         return self.final_form
 
     def __getattr__(self, name):
@@ -306,5 +315,4 @@ class Body(Containers):
         self.filecontent = "<html>\n"+self.style+'\n' + self.filecontent
         self.filecontent += self.script
         self.filecontent += "\n</html>"
-
 
