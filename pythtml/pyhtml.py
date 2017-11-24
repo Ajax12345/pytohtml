@@ -364,6 +364,10 @@ class div:
     def upload_html(self, code):
         self.filecontent += '\n'+code
 
+    def image(self, path, alt = "auto", width="auto", height="auto"):
+        self.filecontent += '\n<img src="{}" alt="{}" width="{}" height="{}">\n'.format(path, alt, width, height)
+
+
     def __getattr__(self, name):
 
         if re.findall('^h\d+$|^p\d+$|strong', name):
@@ -469,6 +473,9 @@ class Body(Containers):
     def upload_form(self, form):
         self.filecontent += '\n'+form
 
+    def image(self, path, alt = "auto", width="auto", height="auto"):
+        self.filecontent += '\n<img src="{}" alt="{}" width="{}" height="{}">\n'.format(path, alt, width, height)
+
     def render(self):
         self.style = self.style.format(style=self.current_style)
         self.script = self.script.format(src = self.src, js_code = self.current_script)
@@ -476,3 +483,5 @@ class Body(Containers):
         self.filecontent = "<html>\n"+self.style+'\n' + self.filecontent
         self.filecontent += self.script
         self.filecontent += "\n</html>"
+
+
