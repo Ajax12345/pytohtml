@@ -66,7 +66,7 @@ div instances can now be utilized to create div content:
 new_div.h1("From my first div", color="Orange")
 new_div.a("http://jamespetullo.pythonanywhere.com/", color="blue", text="click here")
 ```
-etc
+
 
 
 
