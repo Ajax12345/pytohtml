@@ -60,8 +60,13 @@ PyToHtml also supports div id naming:
 ```
 div_content = div(idname ="new_div", background_color="green", width="200px", height="100px", margin_left="100px")
 ```
+div instances can now be utilized to create div content:
 
-
+```
+new_div.h1("From my first div", color="Orange")
+new_div.a("http://jamespetullo.pythonanywhere.com/", color="blue", text="click here")
+```
+etc
 
 
 
